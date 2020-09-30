@@ -87,7 +87,7 @@ public class MulModulus extends BlockGate<MulModulus> {
             answer.addStep(new Step(add));
         }
 
-        for (int i = x0; i < x1+1; i++) {
+        for (int i = x0; i < x1; i++) {
             answer.addStep(new Step (new Swap(i, i + size)));
         }
 

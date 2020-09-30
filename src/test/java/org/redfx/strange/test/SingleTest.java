@@ -43,6 +43,7 @@ import org.redfx.strange.Result;
 import org.redfx.strange.Step;
 import org.redfx.strange.gate.Add;
 import org.redfx.strange.gate.AddInteger;
+import org.redfx.strange.gate.AddModulus;
 import org.redfx.strange.gate.Cnot;
 import org.redfx.strange.gate.Mul;
 import org.redfx.strange.gate.MulModulus;
@@ -56,7 +57,35 @@ import org.redfx.strange.local.Computations;
  */
 public class SingleTest extends BaseGateTests {
   
-    @Test
+      @Test
+    public void addmodgate() {
+        int n = 2;
+        int N = 3;
+        int dim = 2 * (n+1)+1;
+        Program p = new Program(dim);
+        Step prep = new Step();
+        prep.addGates(new X(1), new X(4));
+        p.addStep(prep);
+        
+        Step mod = new Step(new AddModulus(0,2,3,4, N));
+        p.addStep(mod);
+        Result result = runProgram(p);
+        Qubit[] q = result.getQubits();
+        System.err.println("Results: ");
+        for (int i = 0; i < 7; i++) {
+            System.err.println("m["+i+"]: "+q[i].measure());
+        }
+        assertEquals(7, q.length);
+        assertEquals(1, q[0].measure());
+        assertEquals(0, q[1].measure());
+        assertEquals(0, q[2].measure());
+        assertEquals(0, q[3].measure());
+        assertEquals(1, q[4].measure());
+        assertEquals(0, q[5].measure());
+        assertEquals(0, q[6].measure());
+    }
+    
+//    @Test
     public void cf () {
         double d = 340./1024;
         System.err.println("Start with d = "+d);
